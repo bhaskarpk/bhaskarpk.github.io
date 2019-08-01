@@ -1,0 +1,37 @@
+mkdir JSPROJS
+  497  cd JSPROJS/
+  498  npm init
+  499  which pm
+  500  which npm
+  501  which npm
+  502  npm init
+  503  cd JSPROJS/
+  504  npm init
+  505  ls -l
+  506  cat package.json 
+  507  pwd
+  508  npm install express --save
+  509  ls
+  510  npm install body-parser --save
+  511  npm install express-handlebars --save
+  512  npm install sequelize --save
+  513  npm install method-override  --save
+  514  pwd
+  515  mkdir controllers
+  516  mkdir bhaskarpk
+  517  \rm bhaskarpk
+  518  rmdir bhaskarpk
+  519  ls
+  520  ls -l ~/Documents/GitHub/bhaskarpk.github.io/
+  521  ln -s  ~/Documents/GitHub/bhaskarpk.github.io bhaskarpk
+  522  ls
+  523  ls -l bhaskarpk
+  524  ls -l
+  525  ls -l bhaskarpk/
+  526  node server.js 
+  527  node server.js 
+  528  npm install method-override  --save
+  529  node server.js 
+  530  node server.js 
+  531  node server.js 
+  532  node server.js 
