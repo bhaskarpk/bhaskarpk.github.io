@@ -83,7 +83,7 @@ async function init() {
     .attr("x", 50)
     .attr("y", 50)
     .text("  Latitude  ")
-    .attr("transform", "translate(10, rotate(-90)");
+    .attr("transform", "translate(10,20) rotate(-90)");
 
     //Latitude , Longitude Vs fatalities
     mygroup.selectAll("circle").data(data).enter().append("circle")
@@ -111,52 +111,27 @@ async function init() {
       .attr("fill", "red"); 
        ;
 
+// Features of the annotation
+const annotations = [
+  {
+    note: {
+      label: "Here is a trial to see how to see distribution of data without a Map but similar distribution",
+      title: "Annotation Usage:"
+    },
+    x: 500,
+    y: 50,
+    dy: 0,
+    dx: 0
+  }
+]
 
-    // mygroup.selectAll("circle").data(data).enter().append("circle")
-    //   .attr("cx", function(d,i) { return xScale(data[i].Latitude); })
-    //   .attr("cy", function(d,i) { return 0; })
-    //   .attr("r", function(d,i) { return 1 })
-    //   .attr("fill", "purple")
-    //   .transition().duration(5000)
-    //   .attr("cx", function(d,i) { return xScale(data[i].Latitude); })
-    //   .attr("cy", function(d,i) { return yScale(data[i].Longitude); })
-    //   .attr("r", function(d,i) { return  0+data[i].Fatalities;})
-    //   .attr("fill", "red"); 
+// Add annotation to the chart
+const makeAnnotations = d3.annotation()
+  .annotations(annotations)
+d3.select("#chart")
+  .append("g")
+  .call(makeAnnotations)
 
-    // //Month & Year Vs fatalities
-    // mygroup.selectAll("circle").data(data).enter().append("circle")
-    //   .attr("cx", function (d, i) {
-    //     return xScale(data[i].Month);
-    //   })
-    //   .attr("cy", function (d, i) {
-    //     return yScale(data[i].Year);
-    //   })
-    //   .attr("r", function (d, i) {
-    //     return 1
-    //   })
-    //   .attr("fill", "purple")
-    //   .transition().duration(5000)
-    //   .attr("cx", function (d, i) {
-    //     return xScale(data[i].Month);
-    //   })
-    //   .attr("cy", function (d, i) {
-    //     return yScale(data[i].Year);
-    //   })
-    //   .attr("r", function (d, i) {
-    //     return 0 + data[i].Fatalities;
-    //   })
-    //   .attr("fill", "red");
-
-    // mygroup.selectAll("circle").data(data)
-    //   .on("mouseover", function (d) {
-    //     div.style("opacity", .9)
-    //       .style("left", (d3.event.pageX) + "px")
-    //       .style("top", (d3.event.pageY) + "px")
-    //       .html("# of Fatalities are " + d.Fatalities);
-    //   })
-    //   .on("mouseout", function (d) {
-    //     div.style("opacity", 0);
-    //   });
   });
 
 };

@@ -76,7 +76,7 @@ async function init() {
     .attr("x", 100)
     .attr("y", 80)
     .text("Total Fatalities")
-    .attr("transform", "translate(10, rotate(-90)");
+    .attr("transform", "translate(50,150) rotate(-90)");
      
     mygroup.append("g").selectAll("rect").data(sumtotals).enter()
       .append("rect")
