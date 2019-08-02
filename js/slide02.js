@@ -1,8 +1,8 @@
-console.log("slide01");
+console.log("slide02");
 
 async function init() {
   var width = 1000;
-  var height = 650;
+  var height = 1000;
   var margin = {
     top: 20,
     right: 20,
@@ -18,7 +18,7 @@ async function init() {
     return {
       Title: data.Title,
       Year: +data.Year,
-      Month: +data.Month,
+      Month: data.Month,
       Fatalities: +data.Fatalities,
       Injured: +data.Injured,
       Totalvictims: +data.Totalvictims,
@@ -58,32 +58,58 @@ async function init() {
     //d3.select("svg").append("g").attr("transform","translate(50,50)");
 
     // Define the div for the tooltip
-    var div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
+    var tooltipbox = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
+    var yScale = d3.scaleLinear().domain([LatMax,LatMin]).range([0, width-500]);
+    var xScale = d3.scaleLinear().domain([LonMin,LonMax]).range([0,height-400]);
+    //var xScale = d3.scaleLinear().domain([1, 12]).range([0, width-100]);
+    //var yScale = d3.scaleLinear().domain([2008, 2017]).range([0, height-500]);
 
-    // var xScale = d3.scaleLinear().domain([LatMin,LatMax]).range([0, 400]);
-    // var yScale = d3.scaleLinear().domain([LonMin,LonMax]).range([0,400]);
-    var xScale = d3.scaleLinear().domain([1, 12]).range([0, 500]);
-    var yScale = d3.scaleLinear().domain([2008, 2017]).range([0, 500]);
+    var xAxis = d3.axisBottom().scale(xScale).ticks(5);//.tickFormat(d3.format("~s"));
+    var yAxis = d3.axisLeft().scale(yScale).ticks(5);
+    mygroup.append("g").attr("class", "y axis").call(yAxis).attr("transform", "translate(0,0)")
+       .append("text").text("Latitude").attr("text-anchor", "end");
+    mygroup.append("g").attr("class", "x axis").call(xAxis).attr("transform", "translate(0,500)")
+       .append("text").text("Longitude").attr("text-anchor", "end");
 
-    var xAxis = d3.axisBottom().scale(xScale).ticks(12).tickFormat(d3.format("~s"));
-    var yAxis = d3.axisLeft().scale(yScale).ticks(10).tickFormat(d3.format("~s"));
-    mygroup.append("g").attr("class", "x axis").call(xAxis).attr("transform", "translate(0,500)");
-    mygroup.append("g").attr("class", "y axis").call(yAxis).attr("transform", "translate(0,0)");
+    mygroup.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 400)
+    .attr("y", 550)
+    .text("<-- WEST                   Longitude                     EAST-->");
+    mygroup.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x", 50)
+    .attr("y", 50)
+    .text("  Latitude  ")
+    .attr("transform", "translate(10, rotate(-90)");
 
-    // mygroup.selectAll("circle").data(data).enter().append("circle")
-    //   .attr("cx", function(d,i) { return xScale(data[i].Latitude); })
-    //   .attr("cy", function(d,i) { return yScale(data[i].Longitude); })
-    //   .attr("r", function(d,i) { return 0+data[i].Fatalities; })
-    //   .attr("fill", "red")
-    //   .on("mouseover", function(d) { 
-    //     div.style("opacity",.9)  
-    //     .style("left", (d3.event.pageX) + "px")
-    //     .style("top", (d3.event.pageY) + "px")
-    //     .html("# of Fatalities are "+d.Fatalities);
-    //     })          
-    //    .on("mouseout", function(d) {  
-    //    div.style("opacity",0); 
-    //    });
+    //Latitude , Longitude Vs fatalities
+    mygroup.selectAll("circle").data(data).enter().append("circle")
+      // .attr("cx", function(d,i) { return xScale(data[i].Latitude); })
+      // .attr("cy", function(d,i) { return yScale(data[i].Longitude); })
+      // .attr("r", function(d,i) { return 0+data[i].Fatalities; })
+      //.attr("fill", "red")
+      .attr("cx", function(d,i) { return xScale(data[i].Latitude); })
+      .attr("cy", function(d,i) { return 0; })
+      .attr("r", function(d,i) { return 0})
+      .attr("fill", "purple")
+      .on("mouseover", function(d) { 
+      tooltipbox.style("opacity",.9)  
+        .style("left", (d3.event.pageX) + "px")
+        .style("top", (d3.event.pageY) + "px")
+        .html("# of Fatalities are "+d.Fatalities);
+        })          
+       .on("mouseout", function(d) {  
+       tooltipbox.style("opacity",0); 
+       })
+      .transition().duration(5000)
+      .attr("cx", function(d,i) { return xScale(data[i].Longitude); })
+      .attr("cy", function(d,i) { return yScale(data[i].Latitude); })
+      .attr("r", function(d,i) { return  0+data[i].Fatalities;})
+      .attr("fill", "red"); 
+       ;
 
 
     // mygroup.selectAll("circle").data(data).enter().append("circle")
@@ -97,42 +123,40 @@ async function init() {
     //   .attr("r", function(d,i) { return  0+data[i].Fatalities;})
     //   .attr("fill", "red"); 
 
-    //Month & Year Vs fatalities
-    mygroup.selectAll("circle").data(data).enter().append("circle")
-      .attr("cx", function (d, i) {
-        return xScale(data[i].Month);
-      })
-      .attr("cy", function (d, i) {
-        return yScale(data[i].Year);
-      })
-      .attr("r", function (d, i) {
-        return 1
-      })
-      .attr("fill", "purple")
-      .transition().duration(5000)
-      .attr("cx", function (d, i) {
-        return xScale(data[i].Month);
-      })
-      .attr("cy", function (d, i) {
-        return yScale(data[i].Year);
-      })
-      .attr("r", function (d, i) {
-        return 0 + data[i].Fatalities;
-      })
-      .attr("fill", "red");
+    // //Month & Year Vs fatalities
+    // mygroup.selectAll("circle").data(data).enter().append("circle")
+    //   .attr("cx", function (d, i) {
+    //     return xScale(data[i].Month);
+    //   })
+    //   .attr("cy", function (d, i) {
+    //     return yScale(data[i].Year);
+    //   })
+    //   .attr("r", function (d, i) {
+    //     return 1
+    //   })
+    //   .attr("fill", "purple")
+    //   .transition().duration(5000)
+    //   .attr("cx", function (d, i) {
+    //     return xScale(data[i].Month);
+    //   })
+    //   .attr("cy", function (d, i) {
+    //     return yScale(data[i].Year);
+    //   })
+    //   .attr("r", function (d, i) {
+    //     return 0 + data[i].Fatalities;
+    //   })
+    //   .attr("fill", "red");
 
-    mygroup.selectAll("circle").data(data)
-      .on("mouseover", function (d) {
-        div.style("opacity", .9)
-          .style("left", (d3.event.pageX) + "px")
-          .style("top", (d3.event.pageY) + "px")
-          .html("# of Fatalities are " + d.Fatalities);
-      })
-      .on("mouseout", function (d) {
-        div.style("opacity", 0);
-      });
-
-
+    // mygroup.selectAll("circle").data(data)
+    //   .on("mouseover", function (d) {
+    //     div.style("opacity", .9)
+    //       .style("left", (d3.event.pageX) + "px")
+    //       .style("top", (d3.event.pageY) + "px")
+    //       .html("# of Fatalities are " + d.Fatalities);
+    //   })
+    //   .on("mouseout", function (d) {
+    //     div.style("opacity", 0);
+    //   });
   });
 
 };

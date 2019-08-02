@@ -27,6 +27,14 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+
+        }
+        .bar {
+           fill: steelblue;
+        }
+
+        .bar:hover {
+           fill: brown;
         }
 
         @media (min-width: 768px) {
@@ -36,6 +44,7 @@
         }
     </style>
     <script src='https://d3js.org/d3.v5.min.js'></script>
+
 </head>
 
 <body>
@@ -59,9 +68,19 @@
         </div>
     </nav>
 
-    <div class="my-3 p-3">
-        <h2 class="display-5">Another headline</h2>
-        <p class="lead">And an even wittier subheading.</p>
+         <div class="my-3 p-3">
+        <center> <h2  class="display-5">SLIDE -3</h2>
+        <p class="lead">Here we will observe the Total fatalities wrt Year !!</center><br>
+            <ul> 
+                <li>The Bar chart is spread on x axis using Year as a index</li>
+                <li> On mouse over the total number of  Fatalities are provided</li>
+                <li> THe Yaxis consits of the total # of fatalities </li>
+            </ul>
+              <h4> Observations</h4>
+                <ul>
+                    <li>Total Fatalaties are more in Recent Years starting from 2012</li>
+                 </ul>
+        </p>
     </div>
 
     <div class="container">
@@ -78,7 +97,7 @@
     <script src="/js/slide03.js"></script>
 
 
-    <footer class="container py-5">
+<!--     <footer class="container py-5">
         <div class="row">
             <div class="col-12 col-md">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
@@ -130,7 +149,7 @@
                 </ul>
             </div>
         </div>
-    </footer>
+    </footer> -->
 
 
 </body>

@@ -1,9 +1,12 @@
 console.log("slide01");
 
 async function init() {
-  var year = $('#YearDropDown').val();
+  var StartYear=1995;
+  var EndYear=2017;
+  //StartYear = $('#StartYearDropDown').val();
+  //EndYear = $('#EndYearDropDown').val();
   var width = 1000;
-  var height = 650;
+  var height = 1000;
   var margin = {
     top: 20,
     right: 20,
@@ -12,14 +15,14 @@ async function init() {
   };
   //width = width - margin.left - margin.right,
   //height = height - margin.top - margin.bottom;
-
-  console.log("year: " + year);
+    //console.log(StartYear);
+    //console.log(EndYear);
   const data = await d3.csv("/data/dataset.csv");
   d3.csv("/data/dataset.csv", function (data) {
     return {
       Title: data.Title,
       Year: +data.Year,
-      Month: +data.Month,
+      Month: data.Month,
       Fatalities: +data.Fatalities,
       Injured: +data.Injured,
       Totalvictims: +data.Totalvictims,
@@ -32,8 +35,6 @@ async function init() {
       Location: data.Location
     };
   }).then(function (data) {
-    //console.log(data);
-    console.log("In function");
     svgp = d3.select("svg");
     fp = svgp.select("#first");
     var LatMax = d3.max(data, function (d) {
@@ -63,13 +64,29 @@ async function init() {
 
     // var xScale = d3.scaleLinear().domain([LatMin,LatMax]).range([0, 400]);
     // var yScale = d3.scaleLinear().domain([LonMin,LonMax]).range([0,400]);
-    var xScale = d3.scaleLinear().domain([1, 12]).range([0, 500]);
-    var yScale = d3.scaleLinear().domain([2008, 2017]).range([0, 500]);
+    var xScale = d3.scaleBand().domain(["January","February","March","April","May","June","July","August","September","October","November","December"]).range([0, width-100]);
+    //var yScale = d3.scaleLinear().domain([StartYear, EndYear]).range([0, height-500]);
+    var yScale = d3.scaleLinear().domain([1995, 2017]).range([20, height-500]);
 
-    var xAxis = d3.axisBottom().scale(xScale).ticks(12).tickFormat(d3.format("~s"));
-    var yAxis = d3.axisLeft().scale(yScale).ticks(10).tickFormat(d3.format("~s"));
+    var xAxis = d3.axisBottom().scale(xScale).ticks(12,"s");
+    //var yAxis = d3.axisLeft().scale(yScale).ticks(EndYear-StartYear);
+    var yAxis = d3.axisLeft().scale(yScale).ticks(25);
     mygroup.append("g").attr("class", "x axis").call(xAxis).attr("transform", "translate(0,500)");
     mygroup.append("g").attr("class", "y axis").call(yAxis).attr("transform", "translate(0,0)");
+
+    mygroup.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 500)
+    .attr("y", 550)
+    .text("Month");
+    mygroup.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x", 0)
+    .attr("y", 00)
+    .text("Year")
+    .attr("transform", "translate(10, rotate(-90)");
 
     // mygroup.selectAll("circle").data(data).enter().append("circle")
     //   .attr("cx", function(d,i) { return xScale(data[i].Latitude); })
@@ -100,6 +117,7 @@ async function init() {
 
     //Month & Year Vs fatalities
     mygroup.selectAll("circle").data(data).enter().append("circle")
+      //.filter(function(d,i){ return data[i].Year>=StartYear && data[i].Year<=EndYear; })
       .attr("cx", function (d, i) {
         return xScale(data[i].Month);
       })
@@ -109,7 +127,7 @@ async function init() {
       .attr("r", function (d, i) {
         return 1
       })
-      .attr("fill", "purple")
+      .attr("fill", "green")
       .transition().duration(5000)
       .attr("cx", function (d, i) {
         return xScale(data[i].Month);
@@ -120,7 +138,9 @@ async function init() {
       .attr("r", function (d, i) {
         return 0 + data[i].Fatalities;
       })
-      .attr("fill", "red");
+      .attr("fill", function(d,i) { 
+        return (data[i].Fatalities > 40 ? "Red" : data[i].Fatalities > 10? "purple":"blue");
+      });
 
     mygroup.selectAll("circle").data(data)
       .on("mouseover", function (d) {
